@@ -1,4 +1,4 @@
-from core.main import bot
+from core.main import updater
 
 if __name__ == "__main__":
-    bot.run()
+    updater.run()
