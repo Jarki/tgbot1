@@ -55,5 +55,10 @@ class ContextDispatcher:
                         keyword_index = self.keywords_begins.index(context["message"]["text"].split(' ')[0])
                         logging.info(f"detected a keyword at the beginning: {self.keywords_begins[keyword_index]}")
                         self.ee.emit(f"{self.keywords_begins[keyword_index]}_keyword", context)
+                    else:
+                        logging.info("received a text message")
+                        self.ee.emit("text_message", context)
+
+
 
 
