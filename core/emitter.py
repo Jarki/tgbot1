@@ -15,7 +15,7 @@ class ContextDispatcher:
         add_command('start')
         Adds a command for dispatcher to raise events on it
         The event raised will be called name_command
-        (if we add command 'start', look for start_command event)
+        (if we add command 'start', need to handle start_command event)
         """
         self.commands.append(command)
 
