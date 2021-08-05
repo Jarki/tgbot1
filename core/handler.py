@@ -19,3 +19,6 @@ class Handler:
     def respond_to_text(self, context):
         logging.info("handling a text message")
         self.handled.send_message(context, "hello")
+
+    def add_handler(self, event, handler):
+        self.ee.on(event, handler)
