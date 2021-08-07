@@ -31,7 +31,7 @@ class BotApi:
         method = "deleteWebhook"
         requests.get(f"{self.url}/deleteWebhook")  # clear existing webhooks
         r = requests.get(f"{self.url}/setWebhook?url={url}")  # clear existing webhooks
-        logging.info("successfully set a webhook")
+        logging.info(f"tried setting a webhook: {r.json()}")
 
         return json.dumps(r.json())
 
