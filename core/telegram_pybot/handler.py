@@ -1,7 +1,7 @@
 from pymitter import EventEmitter
 import logging
 
-from core.bot import Bot
+from core.telegram_pybot.bot import Bot
 
 
 class Handler:

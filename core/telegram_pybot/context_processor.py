@@ -21,7 +21,7 @@ class ContextProcessor:
 
     def __process_text_message(self, text: str):
         result = {
-            type: ""
+            "type": ""
         }
 
         if text.split(' ')[0][0] == '/':  # detected a command

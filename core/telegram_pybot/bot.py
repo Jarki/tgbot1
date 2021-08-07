@@ -2,11 +2,15 @@ import requests
 import json
 import logging
 
+from core.telegram_pybot.context_processor import ContextProcessor
+from core.telegram_pybot.handler import Handler
+from core.telegram_pybot.dispatcher import EventDispatcher
 
 class Bot:
     def __init__(self, token):
         self.token = token
 
+        self.event_dispatcher = EventDispatcher()
         self.url = f"https://api.telegram.org/bot{self.token}"
 
     def __build_url(self, method: str, params: dict):
@@ -24,8 +28,12 @@ class Bot:
         method = "deleteWebhook"
         requests.get(f"{self.url}/deleteWebhook")  # clear existing webhooks
         r = requests.get(f"{self.url}/setWebhook?url={url}")  # clear existing webhooks
-        print(r.url)
+        logging.info("successfully set a webhook")
+
         return json.dumps(r.json())
+
+    def add_command(self, command, handler):
+        pass
 
     def send_message(self, context, text):
         method = 'sendMessage'
