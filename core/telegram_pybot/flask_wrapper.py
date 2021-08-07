@@ -20,4 +20,4 @@ class FlaskWrapper:
         self.app.run()
 
     def add_endpoint(self, endpoint=None, endpoint_name=None, handler=None):
-        self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler))
+        self.app.add_url_rule(endpoint, endpoint_name, EndpointAction(handler), methods=["POST"])
