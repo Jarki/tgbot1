@@ -1,4 +1,0 @@
-from core.main import updater
-
-if __name__ == "__main__":
-    updater.run()
