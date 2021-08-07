@@ -1,45 +1,35 @@
 import requests
 import json
 import logging
+from flask import request
 
-from core.telegram_pybot.context_processor import ContextProcessor
 from core.telegram_pybot.handler import Handler
 from core.telegram_pybot.dispatcher import EventDispatcher
+from core.telegram_pybot.flask_wrapper import FlaskWrapper
+from core.telegram_pybot.bot_api import BotApi
+
 
 class Bot:
     def __init__(self, token):
-        self.token = token
+        self.app = None
 
         self.event_dispatcher = EventDispatcher()
-        self.url = f"https://api.telegram.org/bot{self.token}"
-
-    def __build_url(self, method: str, params: dict):
-        url = f"{self.url}/{method}"
-        if len(params) == 0:
-            return url
-
-        url = f"{url}?"
-        for param in params:
-            url += f"{param}={params[param]}&"
-
-        return url
-
-    def set_webhook(self, url):
-        method = "deleteWebhook"
-        requests.get(f"{self.url}/deleteWebhook")  # clear existing webhooks
-        r = requests.get(f"{self.url}/setWebhook?url={url}")  # clear existing webhooks
-        logging.info("successfully set a webhook")
-
-        return json.dumps(r.json())
+        self.event_handler = Handler()
+        self.event_handler.subscribe(self.event_dispatcher)
+        self.api_interactor = BotApi(token)
 
     def add_command(self, command, handler):
-        pass
+        if command != "":
+            self.event_dispatcher.add_command(command)
+            self.event_handler.add_handler(f"{command}_command", handler)
 
-    def send_message(self, context, text):
-        method = 'sendMessage'
-        chat_id = context["message"]["chat"]["id"]
+    def run(self, name):
+        self.app = FlaskWrapper(name)
 
-        logging.info("sending a message")
+        self.app.add_endpoint('/', '/', self.__run)
 
-        requests.get(self.__build_url(method, {"chat_id": chat_id,
-                                               "text": text}))
+    def __run(self):
+        if request.method == "POST":
+            logging.info("Received a post request")
+            print(request.json)
+            self.event_dispatcher.dispatch(request.json)
