@@ -1,12 +1,17 @@
-import requests
-import json
 import logging
 from flask import request
+from waitress import serve
 
-from core.telegram_pybot.handler import Handler
-from core.telegram_pybot.dispatcher import EventDispatcher
-from core.telegram_pybot.flask_wrapper import FlaskWrapper
-from core.telegram_pybot.bot_api import BotApi
+if __name__ == "__main__":
+    from handler import Handler
+    from dispatcher import EventDispatcher
+    from flask_wrapper import FlaskWrapper
+    from bot_api import BotApi
+else:
+    from telegram_pybot.handler import Handler
+    from telegram_pybot.dispatcher import EventDispatcher
+    from telegram_pybot.flask_wrapper import FlaskWrapper
+    from telegram_pybot.bot_api import BotApi
 
 
 class Bot:
@@ -28,8 +33,12 @@ class Bot:
 
         self.app.add_endpoint('/', '/', self.__run)
 
+        serve(self.app.app, host="127.0.0.1", port="5000")
+
     def __run(self):
         if request.method == "POST":
             logging.info("Received a post request")
             print(request.json)
             self.event_dispatcher.dispatch(request.json)
+
+        return {"ok": True}
