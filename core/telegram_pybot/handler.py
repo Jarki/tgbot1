@@ -1,24 +1,22 @@
 from pymitter import EventEmitter
 import logging
 
-from core.telegram_pybot.bot import Bot
+from core.telegram_pybot.dispatcher import EventDispatcher
 
 
 class Handler:
-    ee = EventEmitter()
+    def __init__(self):
+        self.ee = EventEmitter
 
-    def __init__(self, bot: Bot):
-        self.handled = bot
-
-    def subscribe(self, emitter: EventEmitter):
+    def subscribe(self, event_dispatcher: EventDispatcher):
+        """
+        subscribes a handler to all the events emitted by passed EventDispatcher
+        """
         logging.info("Subscribed to an emitter")
-        self.ee = emitter
-
-        self.ee.on("text_message", self.respond_to_text)
-
-    def respond_to_text(self, context):
-        logging.info("handling a text message")
-        self.handled.send_message(context, "hello")
+        self.ee = event_dispatcher.get_emitter()
 
     def add_handler(self, event, handler):
+        """
+        uses pymitter.EventEmitter to raise an event, and handle it with a handler
+        """
         self.ee.on(event, handler)
