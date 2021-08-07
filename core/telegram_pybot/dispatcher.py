@@ -1,7 +1,7 @@
 from pymitter import EventEmitter
 import logging
 
-from core.context_processor import ContextProcessor
+from telegram_pybot.context_processor import ContextProcessor
 
 
 class EventDispatcher:
@@ -42,6 +42,10 @@ class EventDispatcher:
         """
         result = self.context_proc.process(context)
 
+        if result is None:
+            logging.warning(f"{self.__class__}: dispatch(self, context): unknown state (result was NoneType)")
+            return
+
         if not "type" in result:
             logging.warning(f"{self.__class__}: dispatch(self, context): unknown state (no type returned)")
             return
@@ -71,6 +75,3 @@ class EventDispatcher:
 
             logging.info(f"detected a front keyword: {result['front_keyword']}")
             self.ee.emit(f"{result['front_keyword']}_front_command")
-
-
-
