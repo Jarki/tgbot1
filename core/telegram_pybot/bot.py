@@ -14,14 +14,15 @@ else:
     from telegram_pybot.bot_api import BotApi
 
 
-class Bot:
+class Bot(BotApi):
     def __init__(self, token):
         self.app = None
 
         self.event_dispatcher = EventDispatcher()
         self.event_handler = Handler()
         self.event_handler.subscribe(self.event_dispatcher)
-        self.api_interactor = BotApi(token)
+
+        super().__init__(token)
 
     def add_command(self, command, handler):
         if command != "":
