@@ -43,14 +43,15 @@ class Bot(BotApi):
         """
         self.__event_dispatcher.context_proc.allow_chat(chat_id)
 
-    def set_use_allowed_chats(self, value):
+    def ignore_disallowed_chats(self, ignore=False):
         """
-        toggle_allowed_chats()
-        changes the value of self.use_allowed_chats and returns the changed value
+        ignore_disallowed_chats(ignore: Boolean)
+        changes the value of self.use_allowed_chats to the parameter and returns the changed value
         if set to false, respond to any chat
         if set to true, only respond to chats whose chat_id stored in self.allowed_chats
+        defaults to False
         """
-        self.__event_dispatcher.context_proc.set_use_allowed_chats(value)
+        self.__event_dispatcher.context_proc.set_use_allowed_chats(ignore)
 
     def run(self):
         """
