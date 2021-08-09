@@ -18,16 +18,35 @@ class Bot(BotApi):
     def __init__(self, token):
         self.app = None
 
-        self.event_dispatcher = EventDispatcher()
-        self.event_handler = Handler()
-        self.event_handler.subscribe(self.event_dispatcher)
+        self.__event_dispatcher = EventDispatcher()
+        self.__event_handler = Handler()
+        self.__event_handler.subscribe(self.__event_dispatcher)
+
+        self.allowed_chats = []
+        self.use_allowed_chats = false
 
         super().__init__(token)
 
     def add_command(self, command, handler):
         if command != "":
-            self.event_dispatcher.add_command(command)
-            self.event_handler.add_handler(f"{command}_command", handler)
+            self.__event_dispatcher.add_command(command)
+            self.__event_handler.add_handler(f"{command}_command", handler)
+
+    def allow_chat(self, chat_id):
+        """
+        allow_chat(chat_id)
+        allow the bot to respond in chat with chat_id
+        """
+        self.allowed_chats.append(chat_id)
+
+    def toggle_allowed_chats(self):
+        """
+        toggle_allowed_chats()
+
+        """
+        self.allowed_chats = not self.allowed_chats
+
+        return self.allowed_chats
 
     def run(self, name):
         self.app = FlaskWrapper(name)
@@ -40,6 +59,6 @@ class Bot(BotApi):
         if request.method == "POST":
             logging.info("Received a post request")
             print(request.json)
-            self.event_dispatcher.dispatch(request.json)
+            self.__event_dispatcher.dispatch(request.json)
 
         return {"ok": True}
