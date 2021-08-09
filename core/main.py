@@ -1,6 +1,6 @@
 import logging
 
-from env.token import token
+from env import token
 from env.allowed_chats import allowed_chats
 from telegram_pybot.bot import Bot
 
@@ -13,7 +13,7 @@ if len(allowed_chats) > 0:
     bot.ignore_disallowed_chats(True)
 
     for chat in allowed_chats:
-        bot.allow_chat(chat)
+        bot.allow_chat(int(chat))
 
 
 def respond_ban(context):
