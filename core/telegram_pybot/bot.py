@@ -1,3 +1,5 @@
+import os
+
 import logging
 from flask import request
 from waitress import serve
@@ -61,7 +63,7 @@ class Bot(BotApi):
 
         self.app.add_endpoint('/', '/', self.__run)
 
-        serve(self.app.app, host="127.0.0.1", port="5000")
+        serve(self.app.app, host="127.0.0.1", port=os.environ.get("PORT", 5000))
 
     def __run(self):
         """
