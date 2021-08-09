@@ -23,11 +23,15 @@ class Bot(BotApi):
         self.__event_handler.subscribe(self.__event_dispatcher)
 
         self.allowed_chats = []
-        self.use_allowed_chats = false
+        self.use_allowed_chats = False
 
         super().__init__(token)
 
     def add_command(self, command, handler):
+        """
+        add_command('start', handle_start)
+        adds a command to listen for and a handler to handle it
+        """
         if command != "":
             self.__event_dispatcher.add_command(command)
             self.__event_handler.add_handler(f"{command}_command", handler)
@@ -37,25 +41,31 @@ class Bot(BotApi):
         allow_chat(chat_id)
         allow the bot to respond in chat with chat_id
         """
-        self.allowed_chats.append(chat_id)
+        self.__event_dispatcher.context_proc.allow_chat(chat_id)
 
-    def toggle_allowed_chats(self):
+    def set_use_allowed_chats(self, value):
         """
         toggle_allowed_chats()
-
+        changes the value of self.use_allowed_chats and returns the changed value
+        if set to false, respond to any chat
+        if set to true, only respond to chats whose chat_id stored in self.allowed_chats
         """
-        self.allowed_chats = not self.allowed_chats
+        self.__event_dispatcher.context_proc.set_use_allowed_chats(value)
 
-        return self.allowed_chats
-
-    def run(self, name):
-        self.app = FlaskWrapper(name)
+    def run(self):
+        """
+        creates a flask app and runs it using waitress.serve
+        """
+        self.app = FlaskWrapper(__name__)
 
         self.app.add_endpoint('/', '/', self.__run)
 
         serve(self.app.app, host="127.0.0.1", port="5000")
 
     def __run(self):
+        """
+        method to handle post requests received through flask
+        """
         if request.method == "POST":
             logging.info("Received a post request")
             print(request.json)
