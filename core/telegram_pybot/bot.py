@@ -1,5 +1,3 @@
-import os
-
 import logging
 from flask import request
 from waitress import serve
@@ -55,7 +53,7 @@ class Bot(BotApi):
         """
         self.__event_dispatcher.context_proc.set_use_allowed_chats(ignore)
 
-    def run(self):
+    def run(self, host, port):
         """
         creates a flask app and runs it using waitress.serve
         """
@@ -63,7 +61,7 @@ class Bot(BotApi):
 
         self.app.add_endpoint('/', '/', self.__run)
 
-        serve(self.app.app, host="127.0.0.1", port=os.environ.get("PORT", 5000))
+        serve(self.app.app, host=host, port=port)
 
     def __run(self):
         """
