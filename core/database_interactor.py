@@ -77,7 +77,6 @@ class DBInteractor:
             set_=dict(counter=stmt.table.columns.counter + 1)
         )
 
-        print(stmt)
         connection = self.db.connect()
         connection.execute(stmt)
 
