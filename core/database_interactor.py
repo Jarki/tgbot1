@@ -40,7 +40,7 @@ class DBInteractor:
 
         stmt = select([
             table
-        ]).order_by(desc(table.columns.counter)).limit(10)
+        ]).order_by(desc(table.columns.counter), table.columns.username).limit(10)
 
         connection = self.db.connect()
         return connection.execute(stmt)
