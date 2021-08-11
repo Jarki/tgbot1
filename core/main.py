@@ -2,12 +2,13 @@ import logging
 
 from env import token
 from env.allowed_chats import allowed_chats
+from env import server_config
 from telegram_pybot.bot import Bot
 
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token.token)
-bot.set_webhook("https://fc34f8a91941.ngrok.io")
+bot.set_webhook("https://.ngrok.io")
 
 if len(allowed_chats) > 0:
     bot.ignore_disallowed_chats(True)
@@ -27,11 +28,14 @@ def respond_ban(context):
 
     name = name[1]  # select the first argument
 
+    if len(name) > 64:  # too long
+        return
+
     responses = ["Banned ", " is now banned", "Successfully banned "]
     bot.send_message(context, f"Banned {name}")
 
 
 bot.add_command('ban', respond_ban)
 
-bot.run()
+bot.run(server_config.host, server_config.port)
 

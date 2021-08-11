@@ -53,13 +53,16 @@ class Bot(BotApi):
         """
         self.__event_dispatcher.context_proc.set_use_allowed_chats(ignore)
 
+    def add_get_handler(self):
+        pass
+
     def run(self, host, port):
         """
         creates a flask app and runs it using waitress.serve
         """
         self.app = FlaskWrapper(__name__)
 
-        self.app.add_endpoint('/', '/', self.__run)
+        self.app.add_endpoint('/', '/', self.__run, ["POST"])
 
         serve(self.app.app, host=host, port=port)
 
