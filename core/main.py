@@ -56,8 +56,10 @@ def respond_stats_users(context):
     string = "Top 10 bananas:\n"
     users = db.get_table_users(chat_id)
 
+    counter = 1
     for row in users:
-        string += f"{row.username} issued {row.counter} bans\n"
+        string += f"{counter}. {row.username} issued {row.counter} bans\n"
+        counter = counter + 1
 
     bot.send_message(context, string)
 
@@ -68,8 +70,10 @@ def respond_stats_banned(context):
     string = "Top 10 banned:\n"
     users = db.get_table_banned(chat_id)
 
+    counter = 1
     for row in users:
-        string += f"{row.username} got banned {row.counter} times\n"
+        string += f"{counter}. {row.username} got banned {row.counter} times\n"
+        counter = counter + 1
 
     bot.send_message(context, string)
 
