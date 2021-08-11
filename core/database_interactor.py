@@ -1,5 +1,5 @@
 import sqlalchemy
-from sqlalchemy import Table, Column, String, MetaData, Integer, select, func
+from sqlalchemy import Table, Column, String, MetaData, Integer, select, desc
 from sqlalchemy.dialects.postgresql import insert
 import logging
 
@@ -40,10 +40,10 @@ class DBInteractor:
 
         stmt = select([
             table
-        ]).order_by(table.columns.counter).limit(10)
+        ]).order_by(desc(table.columns.counter)).limit(10)
 
         connection = self.db.connect()
-        return connection.execute(stmt).fetchall()
+        return connection.execute(stmt)
 
     def __create_chat_table(self, chat_id, for_users=True):
         table_name = self.__build_tablename(chat_id, for_users)
