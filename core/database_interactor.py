@@ -1,7 +1,7 @@
 import sqlalchemy
 from sqlalchemy import Table, Column, String, MetaData, Integer, select, func
 from sqlalchemy.dialects.postgresql import insert
-
+import logging
 
 class DBInteractor:
     def __init__(self, username, password, dbname, host="localhost", port=5432):
@@ -19,7 +19,7 @@ class DBInteractor:
     @staticmethod
     def __build_tablename(chat_id, table_type):
         """builds a tablename for chat_id and depending if want a name for users or most banned"""
-        if type:
+        if table_type:
             return f"chat_{chat_id}_users"
         else:
             return f"chat_{chat_id}_most_banned"
@@ -60,13 +60,13 @@ class DBInteractor:
         return True
 
     def __update_counter(self, chat_id, username, table_type):
-        tablename = self.__build_tablename(chat_id, table_type)
+        table_name = self.__build_tablename(chat_id, table_type)
 
-        if not self.__table_exists(tablename):
+        if not self.__table_exists(table_name):
             self.__create_chat_table(chat_id, table_type)
 
         table = Table(
-            tablename,
+            table_name,
             MetaData(self.db),
             autoload=True,
             autoload_with=self.db
@@ -77,12 +77,14 @@ class DBInteractor:
             index_elements=["username"],
             set_=dict(counter=stmt.excluded.counter + 1)
         )
+        print(stmt)
 
         connection = self.db.connect()
         connection.execute(stmt)
 
     def get_table_users(self, chat_id):
         """returns top 10 bot users of chat"""
+        logging.info(f"getting table for {chat_id}")
         return self.__get_table(chat_id, self.BOT_USERS)
 
     def get_table_banned(self, chat_id):
