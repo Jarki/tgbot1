@@ -39,9 +39,8 @@ class DBInteractor:
         )
 
         stmt = select([
-            table,
-            func.order_by('counter', 'user_id')
-        ]).limit(10)
+            table
+        ]).order_by(table.columns.counter).limit(10)
 
         connection = self.db.connect()
         return connection.execute(stmt).fetchall()
@@ -75,10 +74,10 @@ class DBInteractor:
 
         stmt = stmt.on_conflict_do_update(
             index_elements=["username"],
-            set_=dict(counter=stmt.excluded.counter + 1)
+            set_=dict(counter=stmt.table.columns.counter + 1)
         )
-        print(stmt)
 
+        print(stmt)
         connection = self.db.connect()
         connection.execute(stmt)
 
