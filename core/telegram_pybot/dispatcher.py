@@ -42,12 +42,12 @@ class EventDispatcher:
         """
         result = self.context_proc.process(context)
 
-        if not result:
-            logging.info("Did not raise any event")
-            return
-
         if result is None:
             logging.warning(f"{self.__class__}: dispatch(self, context): unknown state (result was NoneType)")
+            return
+
+        if not result:
+            logging.info("Did not raise any event")
             return
 
         if not "type" in result:
