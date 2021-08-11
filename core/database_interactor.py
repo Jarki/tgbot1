@@ -1,12 +1,11 @@
-from env import db_credentials
 import sqlalchemy
 from sqlalchemy import Table, Column, String, MetaData, Integer, select, func
 from sqlalchemy.dialects.postgresql import insert
 
 
 class DBInteractor:
-    def __init__(self):
-        connect_string = f"postgresql://{db_credentials.username}:{db_credentials.password}@{db_credentials.host}:{db_credentials.port}/{db_credentials.dbname}"
+    def __init__(self, username, password, dbname, host="localhost", port=5432):
+        connect_string = f"postgresql://{username}:{password}@{host}:{port}/{dbname}"
         self.db = sqlalchemy.create_engine(connect_string)
 
         self.BOT_USERS = True
