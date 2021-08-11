@@ -62,6 +62,9 @@ class DBInteractor:
     def __update_counter(self, chat_id, username, table_type):
         tablename = self.__build_tablename(chat_id, table_type)
 
+        if not self.__table_exists(tablename):
+            self.__create_chat_table(chat_id, table_type)
+
         table = Table(
             tablename,
             MetaData(self.db),
@@ -101,4 +104,9 @@ class DBInteractor:
     def update_table_banned(self, chat_id, users):
         """updates the banned user count for times getting banned"""
         self.__update_counter(chat_id, users, self.MOST_BANNED)
+
+    def ban_user(self, chat_id, banned_by, banned):
+        """bans the user"""
+        self.update_table_bot_users(chat_id, banned_by)
+        self.update_table_banned(chat_id, banned)
 
