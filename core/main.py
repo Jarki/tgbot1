@@ -10,7 +10,7 @@ from telegram_pybot.bot import Bot
 logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token.token)
-bot.set_webhook("https://8318ff8ce251.ngrok.io")
+bot.set_webhook("https://f104cd3e65a7.ngrok.io")
 
 if len(allowed_chats) > 0:
     bot.ignore_disallowed_chats(True)
