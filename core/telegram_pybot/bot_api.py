@@ -9,17 +9,11 @@ class BotApi:
 
         self.url = f"https://api.telegram.org/bot{self.token}"
 
-    def __build_url(self, method: str, params: dict):
+    def __build_url(self, method: str):
         """
         build a url for methods
         """
         url = f"{self.url}/{method}"
-        if len(params) == 0:
-            return url
-
-        url = f"{url}?"
-        for param in params:
-            url += f"{param}={params[param]}&"
 
         return url
 
@@ -41,9 +35,6 @@ class BotApi:
 
         logging.info("sending a message")
 
-        requests.get(self.__build_url(method, {"chat_id": chat_id,
-                                               "text": text}))
-
-
-
-
+        print(self.__build_url(method))
+        requests.get(self.__build_url(method), params={"chat_id": chat_id,
+                                                       "text": text})
