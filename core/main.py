@@ -78,6 +78,15 @@ def respond_stats_banned(context):
     bot.send_message(context, string)
 
 
+def respond_help(context):
+    string = "/ban [username] - bans username\n" \
+             "/stats_users - shows who used the bot the most\n" \
+             "/stats_banned - shows who has been banned the most\n"
+
+    bot.send_message(context, string)
+
+
+bot.add_command('help', respond_help)
 bot.add_command('ban', respond_ban)
 bot.add_command('stats_users', respond_stats_users)
 bot.add_command('stats_banned', respond_stats_banned)
