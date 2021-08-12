@@ -3,6 +3,7 @@ from sqlalchemy import Table, Column, String, MetaData, Integer, select, desc
 from sqlalchemy.dialects.postgresql import insert
 import logging
 
+
 class DBInteractor:
     def __init__(self, username, password, dbname, host="localhost", port=5432):
         connect_string = f"postgresql://{username}:{password}@{host}:{port}/{dbname}"
