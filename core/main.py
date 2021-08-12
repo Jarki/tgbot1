@@ -33,7 +33,7 @@ def respond_ban(context):
 
     name = name[1]  # select the first argument
 
-    if len(name) > 64:  # too long
+    if len(name) > 32:  # too long
         return
 
     user = context["message"]
